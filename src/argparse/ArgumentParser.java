@@ -7,8 +7,7 @@ import argparse.arguments.*;
 public class ArgumentParser {
     private String description;
     private String[] args;
-    private LinkedList<Argument> optionalArguments = new LinkedList<>();
-    private LinkedList<Argument> positionalArguments = new LinkedList<>();
+    private LinkedList<Argument> arguments = new LinkedList<>();
 
     public ArgumentParser(String description, String[] args) {
         this.description = description;
@@ -16,11 +15,7 @@ public class ArgumentParser {
     }
 
     public void addArgument(Argument arg) {
-        if (arg instanceof OptionalArgument) {
-            optionalArguments.add(arg);
-        } else if (arg instanceof RequiredArgument) {
-            positionalArguments.add(arg);
-        }
+        arguments.add(arg);
     }
 
     public void printHelp() {
@@ -28,19 +23,24 @@ public class ArgumentParser {
         StringBuilder optArgsHelp = new StringBuilder();
         StringBuilder usageBanner = new StringBuilder("Usage: java MyProgram");
 
-        if (!positionalArguments.isEmpty()) {
-            posArgsHelp.append("\nPositional Arguments:");
-            for (Argument arg : positionalArguments) {
-                posArgsHelp.append("\n").append(arg);
-                usageBanner.append(" ").append(arg.getArgument());
-            }
-        }
-
-        if (!optionalArguments.isEmpty()) {
-            optArgsHelp.append("\nOptional Arguments:");
-            for (Argument arg : optionalArguments) {
-                optArgsHelp.append("\n").append(arg);
-                usageBanner.append(" ").append("[").append(arg.getArgument()).append("]");
+        if (!arguments.isEmpty()) {
+            for (Argument arg : arguments) {
+                if (arg instanceof RequiredArgument) {
+                    if (posArgsHelp.length() == 0) {
+                        // If nothing has been added to the positional arguments help string, added a title
+                        posArgsHelp.append("\nPositional Arguments:");
+                    }
+                    posArgsHelp.append("\n").append(arg);
+                    usageBanner.append(" ").append(arg.getArgument());
+                } else if (arg instanceof OptionalArgument) {
+                    if (optArgsHelp.length() == 0) {
+                        // If nothing has been added to the optional arguments help string, added a title
+                        optArgsHelp.append("\nOptional Arguments:");
+                    }
+                    optArgsHelp.append("\n").append(arg);
+                    // Format optional arguments inside square brackets
+                    usageBanner.append(" ").append("[").append(arg.getArgument()).append("]");
+                }
             }
         }
 
