@@ -14,9 +14,4 @@ public class PositionalArgument extends RequiredArgument {
     public void setInput(String input) {
         this.input = input;
     }
-
-    @Override
-    public boolean contains(String[] args) {
-        return false;
-    }
 }

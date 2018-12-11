@@ -1,21 +1,25 @@
 package argparse;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import argparse.arguments.*;
+import argparse.arguments.exceptions.DuplicateOptionException;
 
 public class ArgumentParser {
     private String description;
     private String[] args;
-    private LinkedList<Argument> arguments = new LinkedList<>();
+    private ArrayList<Argument> arguments = new ArrayList<>();
 
     public ArgumentParser(String description, String[] args) {
         this.description = description;
         this.args = args;
-        arguments.add(new FlagArgument("--help" , "-h", "show this help message and exit"));
+        arguments.add(new FlagArgument("--help", "-h", "Show this help message and exit"));
     }
 
     public void addArgument(Argument arg) {
+        if (arguments.contains(arg)) {
+            throw new DuplicateOptionException();
+        }
         arguments.add(arg);
     }
 
@@ -31,32 +35,26 @@ public class ArgumentParser {
         if (!arguments.isEmpty()) {
             for (Argument arg : arguments) {
                 if (arg instanceof RequiredArgument) {
-                    if (posArgsHelp.length() == 0) {
-                        // If nothing has been added to the positional arguments help string, added a title
-                        posArgsHelp.append("\nPositional Arguments:");
-                    }
                     posArgsHelp.append("\n").append(arg);
-                    posArgs.append(" ").append(arg.getArgument());
+                    posArgs.append(" ").append(arg.getKeyword());
                 } else if (arg instanceof OptionalArgument) {
-                    if (optArgsHelp.length() == 0) {
-                        // If nothing has been added to the optional arguments help string, added a title
-                        optArgsHelp.append("\nOptional Arguments:");
-                    }
-                    optArgsHelp.append("\n").append(arg);
                     // Format optional arguments inside square brackets
-                    optArgs.append(" ").append("[").append(arg.getArgument()).append("]");
+                    optArgsHelp.append("\n").append(arg);
+                    optArgs.append(" ").append("[").append(arg.getKeyword()).append("]");
                 }
             }
         }
 
-        String usageBanner = "\nUsage: java MyProgram" + posArgs + optArgs;
+        System.out.println("Usage: java MyProgram" + posArgs + optArgs);
 
-        System.out.println(usageBanner);
+        System.out.print("\nPositional Arguments:");
         System.out.println(posArgsHelp);
+
+        System.out.print("\nOptional Arguments:");
         System.out.println(optArgsHelp);
     }
 
-    public LinkedList<Argument> parseArguments() {
+    public ArrayList<Argument> parseArguments() {
         return null;
     }
 
