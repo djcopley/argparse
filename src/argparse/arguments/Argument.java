@@ -22,11 +22,11 @@ public abstract class Argument {
         return argument;
     }
 
-    public void setArgumentPassed() {
+    public void setPassed() {
         this.argumentPassed = true;
     }
 
-    public boolean isArgumentPassed() {
+    public boolean isPassed() {
         return argumentPassed;
     }
 
