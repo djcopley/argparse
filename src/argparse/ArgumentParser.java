@@ -12,6 +12,7 @@ public class ArgumentParser {
     public ArgumentParser(String description, String[] args) {
         this.description = description;
         this.args = args;
+        arguments.add(new FlagArgument("--help" , "-h", "show this help message and exit"));
     }
 
     public void addArgument(Argument arg) {
@@ -19,9 +20,13 @@ public class ArgumentParser {
     }
 
     public void printHelp() {
+        // Argument help strings to be printed
         StringBuilder posArgsHelp = new StringBuilder();
         StringBuilder optArgsHelp = new StringBuilder();
-        StringBuilder usageBanner = new StringBuilder("Usage: java MyProgram");
+
+        // Argument names to be sorted for usage banner
+        StringBuilder posArgs = new StringBuilder();
+        StringBuilder optArgs = new StringBuilder();
 
         if (!arguments.isEmpty()) {
             for (Argument arg : arguments) {
@@ -31,7 +36,7 @@ public class ArgumentParser {
                         posArgsHelp.append("\nPositional Arguments:");
                     }
                     posArgsHelp.append("\n").append(arg);
-                    usageBanner.append(" ").append(arg.getArgument());
+                    posArgs.append(" ").append(arg.getArgument());
                 } else if (arg instanceof OptionalArgument) {
                     if (optArgsHelp.length() == 0) {
                         // If nothing has been added to the optional arguments help string, added a title
@@ -39,10 +44,12 @@ public class ArgumentParser {
                     }
                     optArgsHelp.append("\n").append(arg);
                     // Format optional arguments inside square brackets
-                    usageBanner.append(" ").append("[").append(arg.getArgument()).append("]");
+                    optArgs.append(" ").append("[").append(arg.getArgument()).append("]");
                 }
             }
         }
+
+        String usageBanner = "\nUsage: java MyProgram" + posArgs + optArgs;
 
         System.out.println(usageBanner);
         System.out.println(posArgsHelp);
@@ -50,8 +57,6 @@ public class ArgumentParser {
     }
 
     public LinkedList<Argument> parseArguments() {
-        LinkedList<Argument> presentArgs = new LinkedList<>();
-        // Parse arguments
         return null;
     }
 
