@@ -30,6 +30,10 @@ public abstract class Argument {
         return argumentPassed;
     }
 
+    public boolean argEquals(String arg) {
+        return arg.equals(getArgument());
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Argument)) {

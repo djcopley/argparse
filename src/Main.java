@@ -12,6 +12,6 @@ public class Main {
         parser.addArgument(arg2);
         parser.addArgument(arg3);
 
-        parser.printHelp();
+        parser.parseArguments();
     }
 }
