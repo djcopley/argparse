@@ -56,7 +56,7 @@ public class ArgumentParser {
         }
     }
 
-    public void printHelp() {
+    private void printHelp() {
         // Argument help strings to be printed
         StringBuilder posArgsHelp = new StringBuilder();
         StringBuilder optArgsHelp = new StringBuilder();
@@ -85,22 +85,44 @@ public class ArgumentParser {
 
         System.out.print("\nOptional Arguments:");
         System.out.println(optArgsHelp);
+
+        System.exit(0);
     }
 
     public ArrayList<Argument> parseArguments() {
-        // Cover passed arguments
-        for (String arg : args) {
-            arguments.checkArgPassed(arg);
-        }
 
+        // If help flag is passed, print help menu and quit
         if (helpArg.isPassed()) {
             printHelp();
-            System.exit(0);
+        }
+
+        // Parse positional args
+        int posArgIndex = 0;
+        for (Argument arg : arguments) {
+            if (arg instanceof PositionalArgument) {
+                if (args.length == 0) {
+                    System.out.println("\nPositional arguments not specified\n");
+                    printHelp();
+                }
+                if (!arguments.containsArg(args[posArgIndex])) {
+                    ((PositionalArgument) arg).setInput(args[posArgIndex++]);
+                    arg.setPassed();
+                } else {
+                    System.out.println(String.format("\nPositional argument \"%s\" not specified\n", arg.getArgument()));
+                    printHelp();
+                }
+            }
+        }
+
+        // Cover passed optional arguments
+        for (String arg : args) {
+            arguments.checkArgPassed(arg);
         }
 
         return arguments;
     }
 
+    @Override
     public String toString() {
         return description;
     }
