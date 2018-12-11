@@ -1,6 +1,7 @@
 package argparse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import argparse.arguments.*;
 import argparse.arguments.exceptions.DuplicateOptionException;
@@ -8,12 +9,13 @@ import argparse.arguments.exceptions.DuplicateOptionException;
 public class ArgumentParser {
     private String description;
     private String[] args;
-    private ArrayList<Argument> arguments = new ArrayList<>();
+    private ArgumentList<Argument> arguments = new ArgumentList<>();
+    private Argument helpArg = new FlagArgument("--help", "-h", "Show this help message and exit");
 
     public ArgumentParser(String description, String[] args) {
         this.description = description;
         this.args = args;
-        arguments.add(new FlagArgument("--help", "-h", "Show this help message and exit"));
+        arguments.add(helpArg);
     }
 
     public void addArgument(Argument arg) {
@@ -21,6 +23,37 @@ public class ArgumentParser {
             throw new DuplicateOptionException();
         }
         arguments.add(arg);
+    }
+
+    private class ArgumentList<E extends Argument> extends ArrayList<E> {
+        ArgumentList(int initialCapacity) {
+            super(initialCapacity);
+        }
+
+        ArgumentList() {
+        }
+
+        ArgumentList(Collection<? extends E> c) {
+            super(c);
+        }
+
+        boolean containsArg(String stringArg) {
+            for (E arg : this) {
+                if (arg.argEquals(stringArg)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void checkArgPassed(String stringArg) {
+            for (E arg : this) {
+                if (arg.argEquals(stringArg)) {
+                    arg.setPassed();
+                }
+            }
+
+        }
     }
 
     public void printHelp() {
@@ -55,16 +88,17 @@ public class ArgumentParser {
     }
 
     public ArrayList<Argument> parseArguments() {
-        if (args.length == 0) {
+        // Cover passed arguments
+        for (String arg : args) {
+            arguments.checkArgPassed(arg);
+        }
+
+        if (helpArg.isPassed()) {
             printHelp();
             System.exit(0);
         }
-        for (String arg : args) {
-            if (arguments.contains(arg)) {
-                System.out.println(arg);
-            }
-        }
-        return null;
+
+        return arguments;
     }
 
     public String toString() {
