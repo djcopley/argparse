@@ -17,6 +17,7 @@ public class PositionalArgument extends RequiredArgument {
 
     @Override
     public boolean argEquals(String arg) {
+        // Return false since positional arguments won't be accessed by specific keyword
         return false;
     }
 }
