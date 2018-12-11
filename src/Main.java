@@ -1,17 +1,29 @@
 import argparse.*;
 import argparse.arguments.*;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
-        Argument arg1 = new FlagArgument("--test", "-t", "Test argument");
-        Argument arg2 = new PositionalArgument("foo", "Test argument");
-        Argument arg3 = new FlagArgument("--tesst", "Test argument");
+        FlagArgument arg1 = new FlagArgument("--test", "-t", "Test argument");
+        PositionalArgument arg2 = new PositionalArgument("foo", "Test argument");
+        FlagArgument arg3 = new FlagArgument("--tesst", "Test argument");
 
         ArgumentParser parser = new ArgumentParser("Argument parser", args);
         parser.addArgument(arg1);
         parser.addArgument(arg2);
         parser.addArgument(arg3);
 
-        parser.parseArguments();
+        ArrayList<Argument> t = parser.parseArguments();
+
+        System.out.println("Positional argument input:");
+        System.out.println(arg2.getInput());
+
+        System.out.println("\nArguments passed:");
+        for (Argument a : t) {
+            if(a.isPassed()) {
+                System.out.println(a.getArgument());
+            }
+        }
     }
 }

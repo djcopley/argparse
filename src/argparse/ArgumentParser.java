@@ -101,14 +101,14 @@ public class ArgumentParser {
         for (Argument arg : arguments) {
             if (arg instanceof PositionalArgument) {
                 if (args.length == 0) {
-                    System.out.println("\nPositional arguments not specified\n");
+                    System.out.println("Positional arguments not specified\n");
                     printHelp();
                 }
                 if (!arguments.containsArg(args[posArgIndex])) {
                     ((PositionalArgument) arg).setInput(args[posArgIndex++]);
                     arg.setPassed();
                 } else {
-                    System.out.println(String.format("\nPositional argument \"%s\" not specified\n", arg.getArgument()));
+                    System.out.println(String.format("Positional argument \"%s\" not specified\n", arg.getArgument()));
                     printHelp();
                 }
             }
