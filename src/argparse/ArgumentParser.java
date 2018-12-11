@@ -55,6 +55,15 @@ public class ArgumentParser {
     }
 
     public ArrayList<Argument> parseArguments() {
+        if (args.length == 0) {
+            printHelp();
+            System.exit(0);
+        }
+        for (String arg : args) {
+            if (arguments.contains(arg)) {
+                System.out.println(arg);
+            }
+        }
         return null;
     }
 

@@ -29,6 +29,11 @@ public class FlagArgument extends OptionalArgument {
     }
 
     @Override
+    public boolean argEquals(String arg) {
+        return super.argEquals(arg) || arg.equals(getAlias());
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof FlagArgument)) {
             return false;
