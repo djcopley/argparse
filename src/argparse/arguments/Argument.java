@@ -10,14 +10,15 @@ public abstract class Argument {
         this.argument = argument;
     }
 
-    // TODO Think about the name of this and if there is a better way to check for args
-    public abstract boolean contains(String[] args);
-
     public String getHelp() {
         return help;
     }
 
     public String getArgument() {
+        return argument;
+    }
+
+    public String getKeyword() {
         return argument;
     }
 
@@ -34,11 +35,11 @@ public abstract class Argument {
         if (!(other instanceof Argument)) {
             return false;
         }
-        return this.argument.equals(((Argument) other).argument);
+        return this.getArgument().equals(((Argument) other).getArgument());
     }
 
     @Override
     public String toString() {
-        return String.format("%s\t\t%s", argument, help);
+        return String.format("%s\t\t%s", this.getArgument(), this.getHelp());
     }
 }
