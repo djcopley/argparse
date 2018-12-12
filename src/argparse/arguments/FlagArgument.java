@@ -38,16 +38,16 @@ public class FlagArgument extends OptionalArgument {
         if (!(other instanceof FlagArgument)) {
             return false;
         }
-        return super.equals(other) || this.getAlias().equals(((FlagArgument) other).getAlias());
+        return super.equals(other) || getAlias().equals(((FlagArgument) other).getAlias());
     }
 
     @Override
     public String toString() {
         String r;
         if (alias.isEmpty()) {
-            r = String.format("%s\t\t%s", this.getArgument(), this.getHelp());
+            r = String.format("%s\t\t%s", getArgument(), getHelp());
         } else {
-            r = String.format("%s, %s\t\t%s", this.getAlias(), this.getArgument(), this.getHelp());
+            r = String.format("%s, %s\t\t%s", getAlias(), getArgument(), getHelp());
 
         }
         return r;
