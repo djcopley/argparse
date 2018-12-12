@@ -39,11 +39,11 @@ public abstract class Argument {
         if (!(other instanceof Argument)) {
             return false;
         }
-        return this.getArgument().equals(((Argument) other).getArgument());
+        return getArgument().equals(((Argument) other).getArgument());
     }
 
     @Override
     public String toString() {
-        return String.format("%s\t\t%s", this.getArgument(), this.getHelp());
+        return String.format("%s\t\t%s", getArgument(), getHelp());
     }
 }
