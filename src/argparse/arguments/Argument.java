@@ -86,7 +86,7 @@ public abstract class Argument {
      * @return true if arg matches token, else false
      */
     public boolean argEquals(String arg) {
-        return arg.equals(getKeyword());
+        return arg.equals(getToken());
     }
 
     /**
