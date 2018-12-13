@@ -8,21 +8,25 @@ public class Main {
         FlagArgument arg1 = new FlagArgument("--test", "-t", "Test argument");
         PositionalArgument arg2 = new PositionalArgument("foo", "Test argument");
         FlagArgument arg3 = new FlagArgument("--tesst", "Test argument");
+        PositionalArgument arg4 = new PositionalArgument("doink", "Test argument");
+
 
         ArgumentParser parser = new ArgumentParser("Argument parser", args);
         parser.addArgument(arg1);
-        parser.addArgument(arg2);
+        //parser.addArgument(arg2);
         parser.addArgument(arg3);
+        //parser.addArgument(arg4);
 
         ArrayList<Argument> t = parser.parseArguments();
 
         System.out.println("Positional argument input:");
-        System.out.println(arg2.getInput());
+        //System.out.println(arg2.getInput());
+        //System.out.println(arg4.getInput());
 
         System.out.println("\nArguments passed:");
         for (Argument a : t) {
             if(a.isPassed()) {
-                System.out.println(a.getArgument());
+                System.out.println(a.getToken());
             }
         }
     }
