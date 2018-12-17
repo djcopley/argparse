@@ -94,7 +94,6 @@ public class ArgumentParser {
                     arg.setPassed();
                 }
             }
-
         }
     }
 
@@ -111,16 +110,14 @@ public class ArgumentParser {
         StringBuilder posArgs = new StringBuilder();
         StringBuilder optArgs = new StringBuilder();
 
-        if (!arguments.isEmpty()) {
-            for (Argument arg : arguments) {
-                if (arg instanceof RequiredArgument) {
-                    posArgsHelp.append("\n").append(arg);
-                    posArgs.append(" ").append(arg.getKeyword());
-                } else if (arg instanceof OptionalArgument) {
-                    // Format optional arguments inside square brackets
-                    optArgsHelp.append("\n").append(arg);
-                    optArgs.append(" ").append("[").append(arg.getKeyword()).append("]");
-                }
+        for (Argument arg : arguments) {
+            if (arg instanceof RequiredArgument) {
+                posArgsHelp.append("\n").append(arg);
+                posArgs.append(" ").append(arg.getKeyword());
+            } else if (arg instanceof OptionalArgument) {
+                // Format optional arguments inside square brackets
+                optArgsHelp.append("\n").append(arg);
+                optArgs.append(" ").append("[").append(arg.getKeyword()).append("]");
             }
         }
 
@@ -142,6 +139,11 @@ public class ArgumentParser {
      */
     public ArrayList<Argument> parseArguments() {
 
+        // Cover passed optional arguments
+        for (String arg : args) {
+            arguments.checkArgPassed(arg);
+        }
+
         // If help flag is passed, print help menu and quit
         if (helpArg.isPassed()) {
             printHelp();
@@ -150,7 +152,7 @@ public class ArgumentParser {
         // Parse positional args
         int posArgIndex = 0;
         for (Argument arg : arguments) {
-            if (arg instanceof PositionalArgument) {
+            if (arg instanceof RequiredArgument) {
                 if (posArgIndex >= args.length || arguments.containsArg(args[posArgIndex])) {
                     System.out.println(String.format("Positional argument \"%s\" not specified\n", arg.getToken()));
                     printHelp();
@@ -159,11 +161,6 @@ public class ArgumentParser {
                     arg.setPassed();
                 }
             }
-        }
-
-        // Cover passed optional arguments
-        for (String arg : args) {
-            arguments.checkArgPassed(arg);
         }
 
         return arguments;
