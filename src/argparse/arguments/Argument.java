@@ -54,9 +54,7 @@ public abstract class Argument {
     }
 
     /**
-     * Method returns the command line keyword. The key difference between getKeyword and getToken is, getKeyword
-     * returns the most concise command line argument. For example, in the case of descendents with an "alias" field,
-     * the alias will be returned (if provided).
+     * Method returns the token.
      *
      * @return command line token
      */
@@ -94,9 +92,7 @@ public abstract class Argument {
      * @param arg string argument
      * @return true if arg matches token, else false
      */
-    public boolean stringArgEquals(String arg) {
-        return arg.equals(getToken());
-    }
+    public abstract boolean stringArgEquals(String arg);
 
     /**
      * Method compares two argument objects and returns true if their tokens match.
