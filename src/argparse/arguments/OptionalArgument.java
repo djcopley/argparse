@@ -4,7 +4,7 @@ package argparse.arguments;
  * OptionalArgument class.
  *
  * @author Daniel Copley
- * @version 0.1
+ * @version 0.2
  */
 public abstract class OptionalArgument extends Argument {
     private String alias;
@@ -14,7 +14,7 @@ public abstract class OptionalArgument extends Argument {
      * constructor.
      *
      * @param token Argument object added to parser
-     * @param help     text description of
+     * @param help  text description of
      */
     OptionalArgument(String token, String help) {
         super(token, help);
@@ -45,14 +45,14 @@ public abstract class OptionalArgument extends Argument {
     }
 
     /**
-     * Method returns alias or token (if alias not present).
+     * Method returns argument usage.
      *
      * @return command line token
      */
     @Override
-    public String getKeyword() {
+    public String getUsage() {
         if (alias.isEmpty()) {
-            return super.getKeyword();
+            return super.getUsage();
         }
         return alias;
     }
@@ -76,10 +76,13 @@ public abstract class OptionalArgument extends Argument {
      */
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof FlagArgument)) {
+        if (!(other instanceof OptionalArgument)) {
             return false;
+        } else if (getAlias().isEmpty()) {
+            return getToken().equals(((OptionalArgument) other).getToken());
         }
-        return super.equals(other) || getAlias().equals(((FlagArgument) other).getAlias());
+        return getToken().equals(((OptionalArgument) other).getToken())
+                || getAlias().equals(((OptionalArgument) other).getAlias());
     }
 
     /**
