@@ -64,14 +64,29 @@ public class FlagArgument extends OptionalArgument {
     }
 
     /**
+     * Method parses input and returns true if valid, else false.
+     *
+     * @param args array of string arguments to parse
+     * @return true if the arguments passed is valid, else false
+     */
+    public boolean resolveArgument(String[] args) {
+        for (String s : args) {
+            if (stringArgEquals(s)) {
+                setPassed();
+            }
+        }
+        return true;
+    }
+
+    /**
      * Method compares a string argument to it's token / alias and returns true if the match.
      *
      * @param arg string argument
      * @return true if arg matches token / alias, else false
      */
     @Override
-    public boolean argEquals(String arg) {
-        return super.argEquals(arg) || arg.equals(getAlias());
+    public boolean stringArgEquals(String arg) {
+        return super.stringArgEquals(arg) || arg.equals(getAlias());
     }
 
     /**

@@ -13,6 +13,16 @@ public class PositionalArgument extends RequiredArgument {
     private String input;
 
     /**
+     * Member variable; maintains the index of current positional argument.
+     */
+    private static int posArgIndex = 0;
+
+    /**
+     * Index of positional argument.
+     */
+    private int position;
+
+    /**
      * Constructor method takes two string parameters (token and help), then passes them to the super class
      * constructor.
      *
@@ -21,6 +31,7 @@ public class PositionalArgument extends RequiredArgument {
      */
     public PositionalArgument(String token, String help) {
         super(token, help);
+        position = posArgIndex++;
     }
 
     /**
@@ -34,12 +45,21 @@ public class PositionalArgument extends RequiredArgument {
     }
 
     /**
-     * Method sets field input.
+     * Method parses input and returns true if valid, else false.
      *
-     * @param input value to assign "input" field to
+     * @param args array of string arguments to parse
+     * @return true if the arguments passed is valid, else false
      */
-    public void setInput(String input) {
-        this.input = input;
+    @Override
+    public boolean resolveArgument(String[] args) {
+        if (position < args.length) {
+            if (!args[position].substring(0, 1).equals("-")) {
+                input = args[position];
+                setPassed();
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -49,7 +69,7 @@ public class PositionalArgument extends RequiredArgument {
      * @return false
      */
     @Override
-    public boolean argEquals(String arg) {
+    public boolean stringArgEquals(String arg) {
         // Return false since positional arguments won't be accessed by specific token
         return false;
     }
