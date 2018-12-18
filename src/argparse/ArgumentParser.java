@@ -12,7 +12,7 @@ import argparse.arguments.exceptions.DuplicateOptionException;
  * arguments, and more.
  *
  * @author Daniel Copley
- * @version 0.3
+ * @version 0.4
  */
 public class ArgumentParser {
     /**
@@ -105,11 +105,11 @@ public class ArgumentParser {
         for (Argument arg : arguments) {
             if (arg instanceof RequiredArgument) {
                 posArgsHelp.append("\n").append(arg);
-                posArgs.append(" ").append(arg.getKeyword());
+                posArgs.append(" ").append(arg.getUsage());
             } else if (arg instanceof OptionalArgument) {
                 // Format optional arguments inside square brackets
                 optArgsHelp.append("\n").append(arg);
-                optArgs.append(" ").append("[").append(arg.getKeyword()).append("]");
+                optArgs.append(" ").append("[").append(arg.getUsage()).append("]");
             }
         }
 
@@ -134,7 +134,8 @@ public class ArgumentParser {
             if (helpArg.isPassed()) {
                 printHelp();
             } else if (!arg.resolveArgument(args)) {
-                System.out.println(String.format("Positional argument \"%s\" not specified\n", arg.getToken()));
+                System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n",
+                        arg.getToken()));
                 printHelp();
             }
         }

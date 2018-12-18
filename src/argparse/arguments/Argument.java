@@ -4,7 +4,7 @@ package argparse.arguments;
  * Argument class.
  *
  * @author Daniel Copley
- * @version 0.3
+ * @version 0.4
  */
 public abstract class Argument {
     /**
@@ -54,11 +54,11 @@ public abstract class Argument {
     }
 
     /**
-     * Method returns the token.
+     * Method returns argument usage.
      *
      * @return command line token
      */
-    public String getKeyword() {
+    public String getUsage() {
         return token;
     }
 
@@ -101,12 +101,7 @@ public abstract class Argument {
      * @return true if instance token matches other token, else false
      */
     @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof Argument)) {
-            return false;
-        }
-        return getToken().equals(((Argument) other).getToken());
-    }
+    public abstract boolean equals(Object other);
 
     /**
      * Method returns string representation of argument.
