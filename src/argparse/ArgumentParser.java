@@ -61,39 +61,31 @@ public class ArgumentParser {
     }
 
     /**
-     * ArgumentList inner class extends ArrayList adding two key features. First, the method containsArg, returns
+     * ArgumentList inner class extends ArrayList adding two key features. First, the method containsStringArg, returns
      * true if argument token / alias matches an inputted string. Second, the method checkArgPassed, sets
      * argumentPassed field to true if matching token / alias is found.
      *
      * @param <E> generic data type; must be a descendent of Argument
      */
     private class ArgumentList<E extends Argument> extends ArrayList<E> {
-        ArgumentList(int initialCapacity) {
-            super(initialCapacity);
+        ArgumentList() {
         }
 
-        ArgumentList() {
+        ArgumentList(int initialCapacity) {
+            super(initialCapacity);
         }
 
         ArgumentList(Collection<? extends E> c) {
             super(c);
         }
 
-        boolean containsArg(String stringArg) {
+        boolean containsStringArg(String stringArg) {
             for (E arg : this) {
-                if (arg.argEquals(stringArg)) {
+                if (arg.stringArgEquals(stringArg)) {
                     return true;
                 }
             }
             return false;
-        }
-
-        void checkArgPassed(String stringArg) {
-            for (E arg : this) {
-                if (arg.argEquals(stringArg)) {
-                    arg.setPassed();
-                }
-            }
         }
     }
 
@@ -138,31 +130,14 @@ public class ArgumentParser {
      * @return ArrayList of all arguments
      */
     public ArrayList<Argument> parseArguments() {
-
-        // Cover passed optional arguments
-        for (String arg : args) {
-            arguments.checkArgPassed(arg);
-        }
-
-        // If help flag is passed, print help menu and quit
-        if (helpArg.isPassed()) {
-            printHelp();
-        }
-
-        // Parse positional args
-        int posArgIndex = 0;
         for (Argument arg : arguments) {
-            if (arg instanceof RequiredArgument) {
-                if (posArgIndex >= args.length || arguments.containsArg(args[posArgIndex])) {
-                    System.out.println(String.format("Positional argument \"%s\" not specified\n", arg.getToken()));
-                    printHelp();
-                } else {
-                    ((PositionalArgument) arg).setInput(args[posArgIndex++]);
-                    arg.setPassed();
-                }
+            if (helpArg.isPassed()) {
+                printHelp();
+            } else if (!arg.resolveArgument(args)) {
+                System.out.println(String.format("Positional argument \"%s\" not specified\n", arg.getToken()));
+                printHelp();
             }
         }
-
         return arguments;
     }
 

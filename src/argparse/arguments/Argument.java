@@ -21,7 +21,7 @@ public abstract class Argument {
     /**
      * Field is true if token is passed in the command line / token array.
      */
-    private boolean argumentPassed = false;
+    private boolean argumentPassed;
 
     /**
      * Constructor method takes two string parameters (token and help), then initializes fields.
@@ -29,9 +29,10 @@ public abstract class Argument {
      * @param token Argument object added to parser
      * @param help  text to be shown to user when help flag is passed
      */
-    Argument(String token, String help) {
+    public Argument(String token, String help) {
         this.help = help;
         this.token = token;
+        argumentPassed = false;
     }
 
     /**
@@ -66,7 +67,7 @@ public abstract class Argument {
     /**
      * Method sets the argumentPassed field to true.
      */
-    public void setPassed() {
+    void setPassed() {
         this.argumentPassed = true;
     }
 
@@ -80,12 +81,20 @@ public abstract class Argument {
     }
 
     /**
+     * Method parses input and returns true if valid, else false.
+     *
+     * @param args array of string arguments to parse
+     * @return true if the arguments passed is valid, else false
+     */
+    public abstract boolean resolveArgument(String[] args);
+
+    /**
      * Method compares a string argument to it's token and returns true if the match.
      *
      * @param arg string argument
      * @return true if arg matches token, else false
      */
-    public boolean argEquals(String arg) {
+    public boolean stringArgEquals(String arg) {
         return arg.equals(getToken());
     }
 
