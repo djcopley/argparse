@@ -7,20 +7,31 @@ package argparse.arguments;
  * @version 0.2
  */
 public abstract class OptionalArgument extends Argument {
+    /**
+     * Alternative token
+     */
     private String alias;
 
     /**
      * OptionalArgument class constructor. Constructor takes two string params and passes them to the super class
      * constructor.
      *
-     * @param token Argument object added to parser
-     * @param help  text description of
+     * @param token argument token
+     * @param help  text to be shown to user when help flag is passed
      */
     OptionalArgument(String token, String help) {
         super(token, help);
         this.alias = "";
     }
 
+    /**
+     * OptionsArgument class constructor. Constructor takes two string params and passes them to the super class
+     * constructor.
+     *
+     * @param token argument token
+     * @param alias alternative token
+     * @param help  text to be shown to user when help flag is passed
+     */
     OptionalArgument(String token, String alias, String help) {
         super(token, help);
         this.alias = alias;

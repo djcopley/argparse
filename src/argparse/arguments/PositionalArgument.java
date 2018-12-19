@@ -8,40 +8,14 @@ package argparse.arguments;
  */
 public class PositionalArgument extends RequiredArgument {
     /**
-     * Variable stores input from the command line.
-     */
-    private String input;
-
-    /**
-     * Member variable; maintains the index of current positional argument.
-     */
-    private static int posArgIndex = 0;
-
-    /**
-     * Index of positional argument.
-     */
-    private int position;
-
-    /**
      * Constructor method takes two string parameters (token and help), then passes them to the super class
      * constructor.
      *
-     * @param token Argument object added to parser
+     * @param token argument token
      * @param help  text to be shown to user when help flag is passed
      */
     public PositionalArgument(String token, String help) {
         super(token, help);
-        position = posArgIndex++;
-    }
-
-    /**
-     * Method returns input field. Input field is set by the parser when it identifies the input of a positional
-     * argument.
-     *
-     * @return command line input
-     */
-    public String getInput() {
-        return input;
     }
 
     /**
@@ -52,9 +26,9 @@ public class PositionalArgument extends RequiredArgument {
      */
     @Override
     public boolean resolveArgument(String[] args) {
-        if (position < args.length) {
-            if (!args[position].substring(0, 1).equals("-")) {
-                input = args[position];
+        if (getPosition() < args.length) {
+            if (!args[getPosition()].substring(0, 1).equals("-")) {
+                setInput(args[getPosition()]);
                 setPassed();
                 return true;
             }
