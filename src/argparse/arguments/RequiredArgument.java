@@ -4,7 +4,7 @@ package argparse.arguments;
  * RequiredArgument class.
  *
  * @author Daniel Copley
- * @version 0.2
+ * @version 0.3
  */
 public abstract class RequiredArgument extends Argument {
     /**
@@ -31,6 +31,19 @@ public abstract class RequiredArgument extends Argument {
      */
     RequiredArgument(String token, String help) {
         super(token, help);
+        position = posArgIndex++;
+    }
+
+    /**
+     * RequiredArgument class constructor. Constructor takes two string params and passes them to the super class
+     * constructor.
+     *
+     * @param token argument token
+     * @param alias alternative token
+     * @param help  text to be shown to user when help flag is passed
+     */
+    RequiredArgument(String token, String alias, String help) {
+        super(token, alias, help);
         position = posArgIndex++;
     }
 
