@@ -12,7 +12,7 @@ import argparse.arguments.exceptions.DuplicateOptionException;
  * arguments, and more.
  *
  * @author Daniel Copley
- * @version 0.4
+ * @version 0.5
  */
 public class ArgumentParser {
     /**
@@ -93,7 +93,7 @@ public class ArgumentParser {
      * Method prints help message. This method is called when either the "help" flag is passed as an argument or not all
      * required arguments are specified.
      */
-    private void printHelp() {
+    public void printHelp() {
         // Argument help strings to be printed
         StringBuilder posArgsHelp = new StringBuilder();
         StringBuilder optArgsHelp = new StringBuilder();
@@ -115,11 +115,14 @@ public class ArgumentParser {
 
         System.out.println("Usage: java MyProgram" + posArgs + optArgs);
 
-        System.out.print("\nPositional Arguments:");
-        System.out.println(posArgsHelp);
-
-        System.out.print("\nOptional Arguments:");
-        System.out.println(optArgsHelp);
+        if (posArgsHelp.length() > 0) {
+            System.out.print("\nPositional Arguments:");
+            System.out.println(posArgsHelp);
+        }
+        if (optArgsHelp.length() > 0) {
+            System.out.print("\nOptional Arguments:");
+            System.out.println(optArgsHelp);
+        }
 
         System.exit(0);
     }
@@ -131,9 +134,10 @@ public class ArgumentParser {
      */
     public ArrayList<Argument> parseArguments() {
         for (Argument arg : arguments) {
+            boolean success = arg.resolveArgument(args);
             if (helpArg.isPassed()) {
                 printHelp();
-            } else if (!arg.resolveArgument(args)) {
+            } else if (!success) {
                 System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n",
                         arg.getToken()));
                 printHelp();

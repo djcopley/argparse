@@ -4,7 +4,7 @@ package argparse.arguments;
  * Argument class.
  *
  * @author Daniel Copley
- * @version 0.4
+ * @version 0.5
  */
 public abstract class Argument {
     /**
@@ -19,20 +19,37 @@ public abstract class Argument {
     private String token;
 
     /**
+     * Alternative token
+     */
+    private String alias = null;
+
+    /**
      * Field is true if token is passed in the command line / token array.
      */
-    private boolean argumentPassed;
+    private boolean argumentPassed = false;
 
     /**
      * Constructor method takes two string parameters (token and help), then initializes fields.
      *
-     * @param token Argument object added to parser
+     * @param token argument token
      * @param help  text to be shown to user when help flag is passed
      */
     public Argument(String token, String help) {
         this.help = help;
         this.token = token;
-        argumentPassed = false;
+    }
+
+    /**
+     * Constructor method takes two string parameters (token and help), then initializes fields.
+     *
+     * @param token argument token
+     * @param alias alternative token
+     * @param help  text to be shown to user when help flag is passed
+     */
+    public Argument(String token, String alias, String help) {
+        this.help = help;
+        this.token = token;
+        this.alias = alias;
     }
 
     /**
@@ -45,6 +62,18 @@ public abstract class Argument {
     }
 
     /**
+     * Method returns argument usage.
+     *
+     * @return command line token
+     */
+    public String getUsage() {
+        if (alias == null) {
+            return token;
+        }
+        return alias;
+    }
+
+    /**
      * Method returns argument token.
      *
      * @return argument token
@@ -54,19 +83,12 @@ public abstract class Argument {
     }
 
     /**
-     * Method returns argument usage.
+     * Method returns the arguments alias.
      *
-     * @return command line token
+     * @return alias
      */
-    public String getUsage() {
-        return token;
-    }
-
-    /**
-     * Method sets the argumentPassed field to true.
-     */
-    void setPassed() {
-        this.argumentPassed = true;
+    public String getAlias() {
+        return alias;
     }
 
     /**
@@ -76,6 +98,13 @@ public abstract class Argument {
      */
     public boolean isPassed() {
         return argumentPassed;
+    }
+
+    /**
+     * Method sets the argumentPassed field to true.
+     */
+    void setPassed() {
+        this.argumentPassed = true;
     }
 
     /**
@@ -110,6 +139,9 @@ public abstract class Argument {
      */
     @Override
     public String toString() {
-        return String.format("%s\t\t%s", getToken(), getHelp());
+        if (alias != null) {
+            return String.format("%s, %s\t\t%s", alias, token, help);
+        }
+        return String.format("%s\t\t%s", token, help);
     }
 }
