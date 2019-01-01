@@ -54,7 +54,7 @@ public class ArgumentParser {
      * @param arg Argument object added to parser
      */
     public void addArgument(Argument arg) {
-        if (arguments.contains(arg)) {
+        if (arguments.containsArg(arg)) {
             throw new DuplicateOptionException();
         }
         arguments.add(arg);
@@ -82,6 +82,15 @@ public class ArgumentParser {
         boolean containsStringArg(String stringArg) {
             for (E arg : this) {
                 if (arg.stringArgEquals(stringArg)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        boolean containsArg(Argument argument) {
+            for (E arg : this) {
+                if (arg.argEquals(argument)) {
                     return true;
                 }
             }

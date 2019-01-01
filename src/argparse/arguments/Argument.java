@@ -24,6 +24,11 @@ public abstract class Argument {
     private String alias = null;
 
     /**
+     * Variable stores input from the command line.
+     */
+    private String input = null;
+
+    /**
      * Field is true if token is passed in the command line / token array.
      */
     private boolean argumentPassed = false;
@@ -92,6 +97,24 @@ public abstract class Argument {
     }
 
     /**
+     * Method returns input field.
+     *
+     * @return command line input
+     */
+    public String getInput() {
+        return input;
+    }
+
+    /**
+     * Method sets the input field.
+     *
+     * @param input value to set instance variable "input"
+     */
+    protected void setInput(String input) {
+        this.input = input;
+    }
+
+    /**
      * Method returns argumentPassed field.
      *
      * @return true if the argument has been passed, else false
@@ -103,8 +126,37 @@ public abstract class Argument {
     /**
      * Method sets the argumentPassed field to true.
      */
-    void setPassed() {
+    protected void setPassed() {
         this.argumentPassed = true;
+    }
+
+    /**
+     * Method compares a string argument to it's token and returns true if the match.
+     *
+     * @param arg string argument
+     * @return true if arg matches token, else false
+     */
+    public boolean stringArgEquals(String arg) {
+        if (getAlias() != null) {
+            return arg.equals(getToken()) || arg.equals(getAlias());
+        }
+        return arg.equals(getToken());
+    }
+
+    /**
+     * Compares the tokens of two arguments and returns true if any match
+     *
+     * @param arg argument object to compare token to
+     * @return true if tokens match
+     */
+    public boolean argEquals(Argument arg) {
+        if (getAlias() == null) {
+            return getToken().equals(arg.getToken()) || getToken().equals(arg.getAlias());
+        } else if (arg.getAlias() == null) {
+            return getToken().equals(arg.getToken()) || getAlias().equals(arg.getToken());
+        }
+        return getToken().equals(arg.getToken()) || getToken().equals(arg.getAlias())
+                || getAlias().equals(arg.getToken()) || getAlias().equals(arg.getAlias());
     }
 
     /**
@@ -114,23 +166,6 @@ public abstract class Argument {
      * @return true if the arguments passed is valid, else false
      */
     public abstract boolean resolveArgument(String[] args);
-
-    /**
-     * Method compares a string argument to it's token and returns true if the match.
-     *
-     * @param arg string argument
-     * @return true if arg matches token, else false
-     */
-    public abstract boolean stringArgEquals(String arg);
-
-    /**
-     * Method compares two argument objects and returns true if their tokens match.
-     *
-     * @param other Argument object
-     * @return true if instance token matches other token, else false
-     */
-    @Override
-    public abstract boolean equals(Object other);
 
     /**
      * Method returns string representation of argument.
