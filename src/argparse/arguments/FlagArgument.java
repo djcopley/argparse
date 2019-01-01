@@ -37,8 +37,8 @@ public class FlagArgument extends OptionalArgument {
      * @return true if the arguments passed is valid, else false
      */
     public boolean resolveArgument(String[] args) {
-        for (String s : args) {
-            if (stringArgEquals(s)) {
+        for (String str : args) {
+            if (stringArgEquals(str)) {
                 setPassed();
             }
         }

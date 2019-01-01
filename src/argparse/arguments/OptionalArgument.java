@@ -14,7 +14,7 @@ public abstract class OptionalArgument extends Argument {
      * @param token argument token
      * @param help  text to be shown to user when help flag is passed
      */
-    OptionalArgument(String token, String help) {
+    protected OptionalArgument(String token, String help) {
         super(token, help);
     }
 
@@ -26,7 +26,7 @@ public abstract class OptionalArgument extends Argument {
      * @param alias alternative token
      * @param help  text to be shown to user when help flag is passed
      */
-    OptionalArgument(String token, String alias, String help) {
+    protected OptionalArgument(String token, String alias, String help) {
         super(token, alias, help);
     }
 
@@ -39,22 +39,5 @@ public abstract class OptionalArgument extends Argument {
     @Override
     public boolean stringArgEquals(String arg) {
         return arg.equals(getToken()) || arg.equals(getAlias());
-    }
-
-    /**
-     * Method compares two argument objects and returns true if their tokens/alias's match.
-     *
-     * @param other Argument object
-     * @return true if instance token/alias matches other token/alias, else false
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof OptionalArgument)) {
-            return false;
-        } else if (getAlias() == null || ((OptionalArgument) other).getAlias() == null) {
-            return getToken().equals(((OptionalArgument) other).getToken());
-        }
-        return getToken().equals(((OptionalArgument) other).getToken())
-                || getAlias().equals(((OptionalArgument) other).getAlias());
     }
 }
