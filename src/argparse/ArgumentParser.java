@@ -45,7 +45,6 @@ public class ArgumentParser {
     public ArgumentParser(String description, String[] args) {
         this.description = description;
         this.args = args;
-        arguments.add(helpArg);
     }
 
     /**
@@ -54,7 +53,7 @@ public class ArgumentParser {
      * @param arg Argument object added to parser
      */
     public void addArgument(Argument arg) {
-        if (arguments.contains(arg)) {
+        if (arguments.containsArg(arg)) {
             throw new DuplicateOptionException();
         }
         arguments.add(arg);
@@ -82,6 +81,15 @@ public class ArgumentParser {
         boolean containsStringArg(String stringArg) {
             for (E arg : this) {
                 if (arg.stringArgEquals(stringArg)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        boolean containsArg(Argument argument) {
+            for (E arg : this) {
+                if (arg.argEquals(argument)) {
                     return true;
                 }
             }
@@ -133,11 +141,13 @@ public class ArgumentParser {
      * @return ArrayList of all arguments
      */
     public ArrayList<Argument> parseArguments() {
+        helpArg.resolveArgument(args);
+        if (helpArg.isPassed()) {
+            printHelp();
+        }
         for (Argument arg : arguments) {
             boolean success = arg.resolveArgument(args);
-            if (helpArg.isPassed()) {
-                printHelp();
-            } else if (!success) {
+            if (!success) {
                 System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n",
                         arg.getToken()));
                 printHelp();
