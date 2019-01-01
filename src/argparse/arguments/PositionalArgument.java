@@ -35,16 +35,4 @@ public class PositionalArgument extends RequiredArgument {
         }
         return false;
     }
-
-    /**
-     * Positional arguments will not be matched token; therefore, always return false.
-     *
-     * @param arg string argument
-     * @return false
-     */
-    @Override
-    public boolean stringArgEquals(String arg) {
-        // Return false since positional arguments won't be accessed by specific token
-        return false;
-    }
 }

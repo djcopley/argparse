@@ -8,11 +8,6 @@ package argparse.arguments;
  */
 public class FlagInputArgument extends OptionalArgument {
     /**
-     * Variable stores input from the command line.
-     */
-    private String input;
-
-    /**
      * OptionalArgument class constructor. Constructor takes two string params and passes them to the super class
      * constructor.
      *
@@ -35,13 +30,6 @@ public class FlagInputArgument extends OptionalArgument {
     }
 
     /**
-     * Variable stores input from the command line.
-     */
-    public String getInput() {
-        return input;
-    }
-
-    /**
      * Method parses input and returns true if valid, else false.
      *
      * @param args array of string arguments to parse
@@ -52,7 +40,7 @@ public class FlagInputArgument extends OptionalArgument {
         for (int index = 0; index < args.length; index++) {
             if (stringArgEquals(args[index])) {
                 if (index + 1 < args.length && !args[index + 1].substring(0, 1).equals("-")) {
-                    input = args[index + 1];
+                    setInput(args[index + 1]);
                     setPassed();
                 } else {
                     return false;
@@ -69,6 +57,10 @@ public class FlagInputArgument extends OptionalArgument {
      */
     @Override
     public String getUsage() {
-        return super.getUsage() + " INPUT";
+        String inputToken = getToken().toUpperCase();
+        while (inputToken.substring(0, 1).equals("-")) {
+            inputToken = inputToken.substring(1);
+        }
+        return String.format("%s %s", super.getUsage(), inputToken);
     }
 }
