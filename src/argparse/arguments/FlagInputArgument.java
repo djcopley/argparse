@@ -42,6 +42,7 @@ public class FlagInputArgument extends OptionalArgument {
                 if (index + 1 < args.length && !args[index + 1].substring(0, 1).equals("-")) {
                     setInput(args[index + 1]);
                     setPassed();
+                    return true;
                 } else {
                     return false;
                 }

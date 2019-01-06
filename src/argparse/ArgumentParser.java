@@ -45,7 +45,6 @@ public class ArgumentParser {
     public ArgumentParser(String description, String[] args) {
         this.description = description;
         this.args = args;
-        arguments.add(helpArg);
     }
 
     /**
@@ -137,22 +136,30 @@ public class ArgumentParser {
     }
 
     /**
-     * Method parses arguments and returns an ArrayList of all arguments.
+     * Getter method for argument ArrayList
      *
-     * @return ArrayList of all arguments
+     * @return arguments
      */
-    public ArrayList<Argument> parseArguments() {
+    public ArrayList<Argument> getArguments() {
+        return arguments;
+    }
+
+    /**
+     * Method parses arguments and returns an ArrayList of all arguments.
+     */
+    public void parseArguments() {
+        helpArg.resolveArgument(args);
+        if (helpArg.isPassed()) {
+            printHelp();
+        }
         for (Argument arg : arguments) {
             boolean success = arg.resolveArgument(args);
-            if (helpArg.isPassed()) {
-                printHelp();
-            } else if (!success) {
+            if (!success) {
                 System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n",
                         arg.getToken()));
                 printHelp();
             }
         }
-        return arguments;
     }
 
     /**
