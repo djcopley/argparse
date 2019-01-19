@@ -136,11 +136,18 @@ public class ArgumentParser {
     }
 
     /**
-     * Method parses arguments and returns an ArrayList of all arguments.
+     * Getter method for argument ArrayList
      *
-     * @return ArrayList of all arguments
+     * @return arguments
      */
-    public ArrayList<Argument> parseArguments() {
+    public ArrayList<Argument> getArguments() {
+        return arguments;
+    }
+
+    /**
+     * Method parses arguments and returns an ArrayList of all arguments.
+     */
+    public void parseArguments() {
         helpArg.resolveArgument(args);
         if (helpArg.isPassed()) {
             printHelp();
@@ -153,7 +160,6 @@ public class ArgumentParser {
                 printHelp();
             }
         }
-        return arguments;
     }
 
     /**
