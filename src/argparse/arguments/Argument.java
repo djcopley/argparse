@@ -10,13 +10,13 @@ public abstract class Argument {
     /**
      * Help text / description of the token.
      */
-    private String help;
+    private final String help;
 
     /**
      * String representation of the argument, ie. the keyword the parser is looking for (in the case of a flag
      * argument).
      */
-    private String token;
+    private final String token;
 
     /**
      * Alternative token
