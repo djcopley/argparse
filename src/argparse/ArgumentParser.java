@@ -1,10 +1,8 @@
 package argparse;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import argparse.arguments.*;
-import argparse.arguments.exceptions.DuplicateOptionException;
 
 /**
  * Class ArgumentParser, contains methods and fields to parse input from the command line. The goal of this parser
@@ -15,10 +13,15 @@ import argparse.arguments.exceptions.DuplicateOptionException;
  * @version 0.5
  */
 public class ArgumentParser {
+	/**
+	 * Name of program, will be print in usage of help.
+	 */
+	private final String usage;
+	
     /**
      * Description of the argument parser / program.
      */
-    private String description;
+    private final String description;
 
     /**
      * Array of string arguments to parse. Typically these arguments are passed to the main function from the command
@@ -29,7 +32,7 @@ public class ArgumentParser {
     /**
      * ArrayList of Arguments. These are the arguments that the parser looks for.
      */
-    private ArgumentList<Argument> arguments = new ArgumentList<>();
+    private ArrayList<Argument> arguments = new ArrayList<>();
 
     /**
      * The default help argument. If help flag specified, the help menu will be printed and the program will exit.
@@ -43,8 +46,26 @@ public class ArgumentParser {
      * @param args        a string array of arguments to parse
      */
     public ArgumentParser(String description, String[] args) {
-        this.description = description;
+    	this.usage = "java " + new java.io.File(ArgumentParser.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
+		this.description = description;
         this.args = args;
+        
+        arguments.add(helpArg);
+    }
+    
+    /**
+     * Constructor initializes description and input arguments.
+     *
+     * @param usage       custom usage name (e.g. 'java myProgram')
+     * @param description string description of the argument parser / program
+     * @param args        a string array of arguments to parse
+     */
+    public ArgumentParser(String usage, String description, String[] args) {
+    	this.usage = usage;
+		this.description = description;
+        this.args = args;
+        
+        arguments.add(helpArg);
     }
 
     /**
@@ -53,48 +74,19 @@ public class ArgumentParser {
      * @param arg Argument object added to parser
      */
     public void addArgument(Argument arg) {
-        if (arguments.containsArg(arg)) {
-            throw new DuplicateOptionException();
-        }
+    	if (containsArg(arg)) throw new IllegalArgumentException("duplicated option");
         arguments.add(arg);
     }
-
+    
+    
     /**
-     * ArgumentList inner class extends ArrayList adding two key features. First, the method containsStringArg, returns
-     * true if argument token / alias matches an inputted string. Second, the method checkArgPassed, sets
-     * argumentPassed field to true if matching token / alias is found.
-     *
-     * @param <E> generic data type; must be a descendent of Argument
+     * Method test if Arguement object is in the list.
      */
-    private class ArgumentList<E extends Argument> extends ArrayList<E> {
-        ArgumentList() {
+    public boolean containsArg(Argument argument) {
+        for (Argument arg : arguments) {
+            if (arg.argEquals(argument)) return true;
         }
-
-        ArgumentList(int initialCapacity) {
-            super(initialCapacity);
-        }
-
-        ArgumentList(Collection<? extends E> c) {
-            super(c);
-        }
-
-        boolean containsStringArg(String stringArg) {
-            for (E arg : this) {
-                if (arg.stringArgEquals(stringArg)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        boolean containsArg(Argument argument) {
-            for (E arg : this) {
-                if (arg.argEquals(argument)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -120,8 +112,8 @@ public class ArgumentParser {
                 optArgs.append(" ").append("[").append(arg.getUsage()).append("]");
             }
         }
-
-        System.out.println("Usage: java MyProgram" + posArgs + optArgs);
+        
+        System.out.println("Usage: " + usage + posArgs + optArgs);
 
         if (posArgsHelp.length() > 0) {
             System.out.print("\nPositional Arguments:");
@@ -149,14 +141,11 @@ public class ArgumentParser {
      */
     public void parseArguments() {
         helpArg.resolveArgument(args);
-        if (helpArg.isPassed()) {
-            printHelp();
-        }
+        if (helpArg.isPassed()) printHelp();
+        
         for (Argument arg : arguments) {
-            boolean success = arg.resolveArgument(args);
-            if (!success) {
-                System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n",
-                        arg.getToken()));
+            if (!arg.resolveArgument(args)) {
+                System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n", arg.getToken()));
                 printHelp();
             }
         }

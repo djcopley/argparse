@@ -175,8 +175,8 @@ public abstract class Argument {
     @Override
     public String toString() {
         if (alias != null) {
-            return String.format("%s, %s\t\t%s", alias, token, help);
+            return String.format("  %s, %s\t\t%s", alias, token, help);
         }
-        return String.format("%s\t\t%s", token, help);
+        return String.format("  %s\t\t%s", token, help);
     }
 }
