@@ -22,7 +22,7 @@ public class FlagInputArgument extends OptionalArgument {
     public FlagInputArgument(String token, String help) {
         super(token, help);
         inputToken = token.toUpperCase();
-        while (inputToken.substring(0, 1).equals("-")) {
+        while (inputToken.charAt(0) == '-') {
             inputToken = inputToken.substring(1);
         }
     }
@@ -38,7 +38,7 @@ public class FlagInputArgument extends OptionalArgument {
     public FlagInputArgument(String token, String alias, String help) {
         super(token, alias, help);
         inputToken = token.toUpperCase();
-        while (inputToken.substring(0, 1).equals("-")) {
+        while (inputToken.charAt(0) == '-') {
             inputToken = inputToken.substring(1);
         }
     }
