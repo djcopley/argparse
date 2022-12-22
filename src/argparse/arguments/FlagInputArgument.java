@@ -7,11 +7,11 @@ package argparse.arguments;
  * @version 0.2
  */
 public class FlagInputArgument extends OptionalArgument {
-	/**
-	 * The input token name, by default is upper case token
-	 */
-	private String inputToken;
-	
+    /**
+     * The input token name, by default is upper case token
+     */
+    private String inputToken;
+
     /**
      * OptionalArgument class constructor. Constructor takes two string params and passes them to the super class
      * constructor.
@@ -42,9 +42,7 @@ public class FlagInputArgument extends OptionalArgument {
             inputToken = inputToken.substring(1);
         }
     }
-    
-    
-    
+
     public FlagInputArgument(String token, String inputToken, String alias, String help) {
         super(token, alias, help);
         this.inputToken = inputToken;
@@ -59,16 +57,16 @@ public class FlagInputArgument extends OptionalArgument {
     @Override
     public boolean resolveArgument(String[] args) {
         for (int index = 0; index < args.length; index++) {
-        	if (stringArgEquals(args[index])) {
+            if (stringArgEquals(args[index])) {
                 if (index + 1 < args.length && args[index + 1].charAt(0) != '-') {
                     setInput(args[index + 1]);
                     setPassed();
                 } else return false;
-
-            } else if (!args[index].startsWith("=") && args[index].contains("=") && stringArgEquals(args[index].substring(0, args[index].indexOf('=')))) {
-            	setInput(args[index].substring(args[index].indexOf('=') + 1));
+            } else if (!args[index].startsWith("=") && args[index].contains("=") &&
+                    stringArgEquals(args[index].substring(0, args[index].indexOf('=')))) {
+                setInput(args[index].substring(args[index].indexOf('=') + 1));
                 setPassed();
-        	}
+            }
         }
         return true;
     }
@@ -80,14 +78,14 @@ public class FlagInputArgument extends OptionalArgument {
      */
     @Override
     public String getUsage() {
-        return String.format("%s %s", super.getUsage(), inputToken);
+        return String.format("%s=%s", super.getUsage(), inputToken);
     }
-    
+
     @Override
     public String toString() {
         if (getAlias() != null) {
-            return String.format("  %s, %s=%s\t%s", getAlias(), getToken(), inputToken, getHelp());
+            return String.format("%s, %s=%s\t\t%s", getAlias(), getToken(), inputToken, getHelp());
         }
-        return String.format("  %s=%s\t%s", getToken(), inputToken, getHelp());
+        return String.format("%s=%s\t\t%s", getToken(), inputToken, getHelp());
     }
 }

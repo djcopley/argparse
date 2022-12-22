@@ -13,31 +13,32 @@ import argparse.arguments.*;
  * @version 0.5
  */
 public class ArgumentParser {
-	/**
-	 * Name of program, will be print in usage of help.
-	 */
-	private final String usage;
-	
+    /**
+     * Name of program, will be print in usage of help.
+     */
+    private final String usage;
+
     /**
      * Description of the argument parser / program.
      */
     private final String description;
 
     /**
-     * Array of string arguments to parse. Typically these arguments are passed to the main function from the command
+     * Array of string arguments to parse. Typically, these arguments are passed to the main function from the command
      * line; however, this can be any string array.
      */
-    private String[] args;
+    private final String[] args;
 
     /**
      * ArrayList of Arguments. These are the arguments that the parser looks for.
      */
-    private ArrayList<Argument> arguments = new ArrayList<>();
+    private final ArrayList<Argument> arguments = new ArrayList<>();
 
     /**
      * The default help argument. If help flag specified, the help menu will be printed and the program will exit.
      */
-    private Argument helpArg = new FlagArgument("--help", "-h", "Show this help message and exit");
+    private final Argument helpArg =
+            new FlagArgument("--help", "-h", "Show this help message and exit");
 
     /**
      * Constructor initializes description and input arguments.
@@ -46,13 +47,15 @@ public class ArgumentParser {
      * @param args        a string array of arguments to parse
      */
     public ArgumentParser(String description, String[] args) {
-    	this.usage = "java " + new java.io.File(ArgumentParser.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
-		this.description = description;
+        this.usage = "java " + new java.io.File(
+                ArgumentParser.class.getProtectionDomain().getCodeSource().getLocation().getPath()
+        ).getName();
+        this.description = description;
         this.args = args;
-        
+
         arguments.add(helpArg);
     }
-    
+
     /**
      * Constructor initializes description and input arguments.
      *
@@ -61,10 +64,10 @@ public class ArgumentParser {
      * @param args        a string array of arguments to parse
      */
     public ArgumentParser(String usage, String description, String[] args) {
-    	this.usage = usage;
-		this.description = description;
+        this.usage = usage;
+        this.description = description;
         this.args = args;
-        
+
         arguments.add(helpArg);
     }
 
@@ -74,17 +77,18 @@ public class ArgumentParser {
      * @param arg Argument object added to parser
      */
     public void addArgument(Argument arg) {
-    	if (containsArg(arg)) throw new IllegalArgumentException("duplicated option");
+        if (containsArg(arg)) throw new IllegalArgumentException("duplicated option");
         arguments.add(arg);
     }
-    
-    
+
     /**
-     * Method test if Arguement object is in the list.
+     * Returns true if the argument exists in the argument list, else false.
+     *
+     * @param arg Argument object to test for
      */
-    public boolean containsArg(Argument argument) {
-        for (Argument arg : arguments) {
-            if (arg.argEquals(argument)) return true;
+    public boolean containsArg(Argument arg) {
+        for (Argument argument : arguments) {
+            if (argument.argEquals(arg)) return true;
         }
         return false;
     }
@@ -112,7 +116,7 @@ public class ArgumentParser {
                 optArgs.append(" ").append("[").append(arg.getUsage()).append("]");
             }
         }
-        
+
         System.out.println("Usage: " + usage + posArgs + optArgs);
 
         if (posArgsHelp.length() > 0) {
@@ -142,10 +146,10 @@ public class ArgumentParser {
     public void parseArguments() {
         helpArg.resolveArgument(args);
         if (helpArg.isPassed()) printHelp();
-        
+
         for (Argument arg : arguments) {
             if (!arg.resolveArgument(args)) {
-                System.out.println(String.format("Argument \"%s\" not used, or used incorrectly. See usage.\n", arg.getToken()));
+                System.out.printf("Argument \"%s\" not used, or used incorrectly. See usage.\n%n", arg.getToken());
                 printHelp();
             }
         }
